@@ -48,11 +48,7 @@ class SpectrumsController < ApplicationController
       format.html {}
       format.xml  { render :xml => @spectrum }
       format.csv  {
-        if params[:raw]
-          render :template => "spectrums/raw.csv.erb"
-        else
-          render :template => "spectrums/show.csv.erb" # formatted for SpectraOnline.com
-        end
+        render :text => SpectrumsHelper.show_csv(@spectrum)
       }
       format.json  {
         json = @spectrum.as_json(:except => [:data])
@@ -67,7 +63,6 @@ class SpectrumsController < ApplicationController
     render :template => "spectrums/search"
   end
 
-  # non REST
   def embed
     @spectrum = Spectrum.find(params[:id])
     @width = (params[:width] || 500).to_i
@@ -75,7 +70,11 @@ class SpectrumsController < ApplicationController
     render :layout => false
   end
 
-  # non REST
+  def embed2
+    @spectrum = Spectrum.find(params[:id])
+    render :template => 'embed/spectrum', :layout => 'embed'
+  end
+
   def search
     params[:id] = params[:q].to_s if params[:id].nil?
     @spectrums = Spectrum.where('title LIKE ?',params[:id]+"%").order("id DESC").paginate(:page => params[:page], :per_page => 24)
@@ -86,13 +85,11 @@ class SpectrumsController < ApplicationController
     end
   end
 
-  # non REST
   def recent
     @spectrums = Spectrum.find(:all, :limit => 10, :order => "id DESC")
     render :partial => "capture/results", :layout => false if params[:capture]
   end
 
-  # non REST
   def detail
     @spectrum = Spectrum.find(params[:id])
 
@@ -282,8 +279,6 @@ class SpectrumsController < ApplicationController
     end
   end
 
-  # non REST
-  #def calibrate(x1,wavelength1,x2,wavelength2)
   def calibrate
     @spectrum = Spectrum.find(params[:id])
     if logged_in? && @spectrum.user_id == current_user.id || current_user.role == "admin"
@@ -300,7 +295,6 @@ class SpectrumsController < ApplicationController
     end
   end
 
-  # non REST
   def extract
     @spectrum = Spectrum.find(params[:id])
     if logged_in? && @spectrum.user_id == current_user.id || current_user.role == "admin"
@@ -315,7 +309,6 @@ class SpectrumsController < ApplicationController
     end
   end
 
-  # non REST
   def clone
     @spectrum = Spectrum.find(params[:id])
     if logged_in? && @spectrum.user_id == current_user.id || current_user.role == "admin"
