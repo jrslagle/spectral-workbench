@@ -82,4 +82,13 @@ class CommentsController < ApplicationController
     
   end
 
+  def attr_accessible
+    params.require(:attributes).permit(
+      :spectrum_id, :body, :author, :email, :spectra_set_id
+    )
+  end
+
+  def validates_presence_of
+    params.require(:validated).permit(:author, :email, :body)
+  end
 end
