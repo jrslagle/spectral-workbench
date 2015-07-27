@@ -111,4 +111,8 @@ class MacrosController < ApplicationController
     end
   end
 
+  def permitted_params
+      params.permit macro: [:title, :description, :code, :macro_type, :url, :user_id]
+  end
+
 end

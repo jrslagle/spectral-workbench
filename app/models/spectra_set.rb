@@ -1,7 +1,5 @@
 class SpectraSet < ActiveRecord::Base
 
-  attr_accessible :title, :notes, :spectrums_string, :author
-
   validates_presence_of :title, :user_id
   validates :title, length: { maximum: 60 }
   has_many :comments, :dependent => :destroy
