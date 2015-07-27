@@ -440,4 +440,8 @@ class SpectrumsController < ApplicationController
     render :partial => "spectrums/show/set_results", :layout => false
   end
 
+  def permitted_params
+      params.permit spectrum: [:title, :author, :user_id, :notes, :photo, :video_row]
+  end
+
 end

@@ -48,4 +48,8 @@ class UsersController < ApplicationController
     end
   end
 
+  def permitted_params
+      params.permit user: [:login, :email, :name, :password, :password_confirmation]
+  end
+
 end
