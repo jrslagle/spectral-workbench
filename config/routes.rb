@@ -88,10 +88,6 @@ Rails.application.routes.draw do
   get '/upload' => 'spectrums#new'
 
   resources :users
-<<<<<<< HEAD
-  resources :macros
-=======
->>>>>>> really finished strong attributes
   resources :session
   resources :tags
   resources :sets
