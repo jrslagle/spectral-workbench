@@ -31,6 +31,7 @@ gem 'rdiscount', '2.1.8'
 gem 'will_paginate'
 gem 'will_paginate-bootstrap', '1.0.1'
 gem 'paperclip', '>= 4.1.1'
+gem 'bootstrap-sass', '3.3.5.1'
 
 gem 'ruby-openid'
 gem 'open_id_authentication'
