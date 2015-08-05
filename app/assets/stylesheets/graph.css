@@ -1,0 +1,234 @@
+#graphing {
+  padding:10px;
+}
+
+#graphing h2 {
+  text-align:center;
+}
+
+#graphing h2 a {
+  color:#444;
+}
+
+#graphing #graph {
+  background:#eee;
+  text-align:center;
+}
+
+#graphing #graph .icon-spinner {
+  font-size:20px;
+  color:#aaa;
+  margin-top:30px;
+}
+
+#graphing a.btn-link {
+  text-decoration:none;
+}
+
+#graphing tr.spectrum-tools {
+  border-top:none;
+}
+
+@media (max-width: 400px) {
+
+  #graphing .credit {
+    float: none;
+  }
+
+  #graphing.embed .credit .spectral-workbench {
+    display: block;
+  }
+
+  #graphing .tools {
+    clear: both;
+    width: 100%;
+  }
+
+}
+
+/*@media (max-height: 300px) and (max-width:500px) {*/
+@media (max-width:500px) {
+
+  #graphing .credit {
+    float: right;
+  }
+
+  #graphing .credit .spectral-workbench .super-tiny {
+    display: inline;
+  }
+
+  #graphing .credit .spectral-workbench .normal {
+    display: none;
+  }
+
+  #graphing .credit .spectral-workbench {
+    display: inline;
+  }
+
+}
+
+#graphing .tools {
+  padding: 20px 10px 0 0;
+  font-size: 14px;
+}
+
+#graphing .tools a {
+  padding: 0 5px;
+}
+
+#graphing .tools a {
+  text-decoration: none;
+}
+
+#graphing .tools a:hover .icon {
+  color: #88f;
+}
+
+#graphing .tools div.dropup {
+  display: inline;
+}
+
+#graphing table th {
+  border-top: 0;
+}
+
+#graphing table div.key {
+  width: 10px;
+  height: 10px;
+  margin-top: 5px;
+  background: #ddd;
+  -webkit-border-radius: 10px;
+  -moz-border-radius:    10px;
+  border-radius:         10px;
+}
+
+#graphing table tr.highlight {
+  background: #fff8dd;
+}
+
+#graphing table a.btn-link {
+  font-size: 12px;
+  padding: 0 4px;
+}
+
+#graphing table a.btn-link:hover .icon {
+  color: #888;
+}
+
+
+#graphing svg .highlight {
+  stroke: red !important;
+}
+
+#graphing svg .dimmed {
+  stroke-opacity: 0.3 !important;
+}
+
+#graphing .toolbar {
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+#graphing .credit, #graphing .tools {
+  display: inline;
+}
+
+#graphing .credit .site {
+  display:none;
+}
+
+/* Embed styles */
+
+#graphing.embed .toolbar {
+  text-align: left;
+}
+
+#graphing.embed .credit {
+  float: right;
+  padding: 20px 10px 0 0;
+}
+
+#graphing.embed .credit .spectral-workbench a {
+  color: #444;
+  font-size: 15px;
+  font-family: Junction Light;
+}
+#graphing.embed .credit .spectral-workbench a:hover {
+  color: #888;
+}
+
+#graphing.embed .credit img {
+  height: 16px;
+  display: inline-block;
+  padding-bottom: 4px;
+}
+
+#graphing.embed .credit .super-tiny {
+  display: none;
+}
+
+#graphing.embed .tools {
+  display:block;
+}
+
+#graphing.embed {
+  font-size: 12px;
+  border: 1px solid #ddd;
+  -webkit-border-radius: 10px;
+  -moz-border-radius:    10px;
+  border-radius:         10px;
+  padding: 30px 10px 10px;
+}
+
+#graphing.embed .credit .site {
+  display:block;
+}
+
+#graphing.embed .table-scroll-container {
+  height: 200px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  display: block;
+}
+
+/* Hide the embed-only compact title for all 
+   displays, not just the embed */
+#graphing h3.compact {
+  display: none;
+}
+
+#graphing.embed.compact img {
+  display: none;
+}
+
+#graphing.embed.compact h2 {
+  display: none;
+}
+
+#graphing.embed.compact h3.compact {
+  display: block;
+  float: left;
+  margin-top: 12px;
+  padding-right: 12px;
+}
+
+#graphing.embed.compact .table-scroll-container {
+  display: none;
+}
+
+#graphing.embed .settings {
+  margin-left: 4px;
+}
+
+#graphing.embed .settings .icon {
+  color: #aaa;
+}
+
+#embed-modal {
+  position: fixed;
+  top: 50px;
+  right: 50px;
+  left: 50px;
+  width: auto;
+  margin: 0;
+}

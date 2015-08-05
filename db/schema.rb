@@ -11,20 +11,21 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150625194647) do
+ActiveRecord::Schema.define(:version => 20150723220742) do
 
   create_table "comments", :force => true do |t|
     t.string   "author"
     t.string   "email"
     t.text     "body"
-    t.float    "wavelength"
     t.integer  "x"
     t.integer  "y"
     t.integer  "spectrum_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "spectra_set_id", :default => 0, :null => false
+    t.integer  "spectra_set_id", :default => 0
     t.integer  "user_id",        :default => 0
+    t.integer  "wavelength"
+    t.integer  "intensity"
   end
 
   create_table "devices", :force => true do |t|
@@ -664,24 +665,21 @@ ActiveRecord::Schema.define(:version => 20150625194647) do
   add_index "processed_spectrums", ["spectrum_id"], :name => "index_processed_spectrums_on_spectrum_id", :unique => true
 
   create_table "spectra_sets", :force => true do |t|
-    t.string   "title",          :default => "", :null => false
-    t.string   "author",         :default => "", :null => false
-    t.string   "spectra_string", :default => "", :null => false
+    t.string   "title",      :default => "", :null => false
+    t.string   "author",     :default => "", :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "notes",          :default => "", :null => false
-    t.integer  "user_id",        :default => 0
+    t.text     "notes",      :default => "", :null => false
+    t.integer  "user_id",    :default => 0
   end
 
-  create_table "spectrum_links", :force => true do |t|
-    t.string   "author"
-    t.string   "name"
-    t.string   "type"
-    t.integer  "spectrum_id"
-    t.integer  "spectrum_2_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+  create_table "spectra_sets_spectrums", :id => false, :force => true do |t|
+    t.integer "spectrum_id"
+    t.integer "spectra_set_id"
   end
+
+  add_index "spectra_sets_spectrums", ["spectra_set_id"], :name => "index_spectra_sets_spectrums_on_spectra_set_id"
+  add_index "spectra_sets_spectrums", ["spectrum_id"], :name => "index_spectra_sets_spectrums_on_spectrum_id"
 
   create_table "spectrums", :force => true do |t|
     t.string   "title"
@@ -711,13 +709,14 @@ ActiveRecord::Schema.define(:version => 20150625194647) do
     t.integer  "like_count",                                  :default => 0,       :null => false
     t.integer  "video_row",                                   :default => 0
     t.boolean  "reversed",                                    :default => false,   :null => false
+    t.boolean  "calibrated",                                  :default => false,   :null => false
   end
 
   add_index "spectrums", ["title"], :name => "index_spectrums_on_title"
   add_index "spectrums", ["user_id"], :name => "index_spectrums_on_user_id"
 
   create_table "tags", :force => true do |t|
-    t.string   "user_id"
+    t.integer  "user_id",     :limit => 255
     t.string   "name"
     t.integer  "spectrum_id"
     t.integer  "set_id"

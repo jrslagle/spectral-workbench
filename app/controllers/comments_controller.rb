@@ -1,28 +1,58 @@
 class CommentsController < ApplicationController
 
+  before_filter :require_login, :only => [:spectrum, :spectra_set, :delete]
+
   def index
     @comments = Comment.find :all, :order => "id DESC"
   end
 
-  def create
-    @spectrum = Spectrum.find(params[:spectrum_id])
-    @spectrums = Spectrum.find(:all, :limit => 4, :order => "created_at DESC", :conditions => ["id != ?",@spectrum.id])
-    @jump_to_comment = true
+  def spectrum
+    @spectrum = Spectrum.find(params[:id])
     @comment = @spectrum.comments.new({
 	    :body => params[:comment][:body],
-	    :author => params[:comment][:author],
-	    :email => params[:comment][:email]
+	    :user_id => current_user.id
     })
-    @comment.author = current_user.login if logged_in?
-    @comment.email = current_user.email if logged_in?
-    if (logged_in? || APP_CONFIG["local"]) && @comment.save
-      UserMailer.comment_notification(@spectrum,@comment,User.find(@spectrum.user_id)) if (!logged_in? || current_user.id != @spectrum.user_id)
-      @spectrum.notify_commenters(@comment,current_user) if logged_in?
-      @spectrum.notify_commenters(@comment,false) unless logged_in?
+
+    if @comment.save
+      UserMailer.comment_notification( @spectrum,
+                                       @comment,
+                                       User.find(@spectrum.user_id)
+      ) if current_user.id != @spectrum.user_id
+      @spectrum.notify_commenters(@comment,current_user)
+
       respond_to do |format|
         format.html {
           flash[:notice] = "Comment saved."
-          redirect_to spectrum_path(params[:spectrum_id])
+          redirect_to spectrum_path(@spectrum)+"#c"+@comment.id.to_s
+        }
+        format.json  {
+          @comment.body = RDiscount.new(@comment.body).to_html
+          render :json => @comment
+        }
+      end
+
+    else
+      flash[:error] == "There was an error creating your comment."
+      redirect_to spectrum_path(@spectrum)
+    end
+  end
+
+  def spectraset
+    @set = SpectraSet.find(params[:id])
+    @comment = Comment.new({
+	spectra_set_id: @set.id,
+	body:           params[:comment][:body],
+	user_id:        current_user.id,
+	email:          current_user.email})
+    if @comment.save
+      UserMailer.set_comment_notification(@set,@comment,User.find_by_login(@set.author)) if (!logged_in? || current_user.login != @set.author)
+      @set.notify_commenters(@comment,current_user) if logged_in?
+      @set.notify_commenters(@comment,false) unless logged_in?
+
+      respond_to do |format|
+        format.html {
+          flash[:notice] == "Comment saved."
+          redirect_to sets_path(@set)+"#c"+@comment.id.to_s
         }
         format.json  {
           @comment.body = RDiscount.new(@comment.body).to_html
@@ -30,7 +60,8 @@ class CommentsController < ApplicationController
         }
       end
     else
-      redirect_to spectrum_path(params[:spectrum_id])
+      flash[:error] == "There was an error creating your comment."
+      render :action => "show", :id => params[:id]
     end
   end
 
@@ -40,8 +71,15 @@ class CommentsController < ApplicationController
       @comment.destroy
       flash[:notice] = "Comment deleted."
     end
-    redirect_to "/spectra/show/"+@comment.spectrum_id.to_s if params[:index] != "true"
-    redirect_to "/comments" if params[:index] == "true"
+
+    if params[:index]
+      redirect_to "/comments"
+    elsif @comment.has_spectrum?
+      redirect_to "/spectrums/#{@comment.spectrum_id}"
+    else
+      redirect_to "/sets/#{@comment.spectra_set_id}"
+    end
+    
   end
 
 end

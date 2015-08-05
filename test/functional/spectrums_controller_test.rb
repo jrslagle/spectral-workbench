@@ -21,6 +21,17 @@ class SpectrumsControllerTest < ActionController::TestCase
     assert_response :success # to /analyze/spectrums/#, lets update this
   end
 
+  test "should show spectrum json" do
+    get :show, :id => spectrums(:one).id, :format => :json
+    assert_response :success
+  end
+
+  test "should show spectrum embed" do
+    get :embed, :id => spectrums(:one).id
+    assert_response :success
+    assert_not_nil :spectrum
+  end
+
   test "should show search" do
     get :search, :id => "cfl"
     assert_response :success

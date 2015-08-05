@@ -1,0 +1,51 @@
+<div class="row-fluid">
+  <div class="col span12">
+
+    <h2><a target="_blank" href="/<%= type %>s/<%= datum.id %>"><%= datum.title %></a></h2>
+
+    <h3 class="compact"><a target="_blank" href="/<%= type %>s/<%= datum.id %>"><%= if (datum.title.length < 15) then datum.title else datum.title[0..12]+'...' end %></a></h3>
+
+    <% unless params[:action] == 'embed2' %>
+      <div class="toolbar toolbar-top">
+        <%= render :partial => 'graph/tools', :locals => { type: type, datum: datum } %>
+      </div>
+    <% end %>
+
+    <% if type == :set %>
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab-spectra"  data-toggle="tab"><i  class="icon icon-list"></i>     Spectra</a></li>
+        <li>               <a href="#tab-comments" data-toggle="tab"><i class="icon icon-comments"></i> Comments</a></li>
+      </ul>
+      <!-- TABLE -->
+     
+      <div class="tab-content">
+
+        <div class="tab-pane active" id="tab-spectra">       
+          <%= render :partial => 'graph/spectra', :locals => { datum: datum } %>
+        </div>
+
+        <div class="tab-pane" id="tab-comments">       
+          <div class="row-fluid">
+          
+            <div class="span2">
+            </div>
+          
+            <div class="span8">
+              <%= render partial: 'comments/list', locals: { datum: datum, :comments => datum.comments } %>
+            </div>
+    
+          </div>
+        </div>
+
+      </div>
+    <% end %>
+
+    <% if params[:action] == 'embed2' %>
+      <div class="toolbar toolbar-bottom">
+        <%= render :partial => 'graph/tools', :locals => { type: type, datum: datum } %>
+      </div>
+    <% end %>
+
+  </div>
+</div>
+</div>

@@ -1,15 +1,20 @@
-<div id="embed">
+<%= render partial: "spectrums/show/embed", locals: { spectrum: @spectrum } %>
+<div id="graphing" class="embed">
 <img class="spectrum" src="<%= @spectrum.photo.url(:large) %>" />
 
-<div id="graph"></div>
+<div id="graph"><i class="icon icon-spinner icon-spin"></i></div>
 
 <script type="text/javascript">
 
   var graph;
   jQuery(document).ready(function($) {
-      graph = new SpectralWorkbench.Graph({ spectrum_id: <%= @spectrum.id %> });
+      graph = new SpectralWorkbench.Graph({
+        spectrum_id: <%= @spectrum.id %>,
+        embed: true,
+        calibrated: <%= @spectrum.calibrated %>
+      });
   })
 
 </script>
-<%= render :partial => "embed/body", :locals => {:type => :spectrum, :datum => @spectrum } %>
+<%= render :partial => "graph/body", :locals => {:type => :spectrum, :datum => @spectrum } %>
 </div>

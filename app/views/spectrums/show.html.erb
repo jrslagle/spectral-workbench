@@ -37,8 +37,8 @@
       <div class="navbar-inner">
         <a id="$('#calibrate-begin').focus()" data-toggle="modal" href="#calibratemodal1" class="btn btn-primary"><i class="icon icon-white icon-screenshot"></i><span class="hidden-phone"> Calibrate</span></a>
 
-        <a href="#embedmodal" class="btn btn-inverse hidden-phone" data-toggle="modal"><i class="icon icon-white icon-share"></i><span class="hidden-phone"> Embed</span></a>
-        <%= render :partial => "spectrums/show/embed", :locals => {spectrum: @spectrum} %>
+        <a href="#embed-modal" class="btn btn-inverse hidden-phone" data-toggle="modal"><i class="icon icon-white icon-share"></i><span class="hidden-phone"> Embed</span></a>
+        <%= render partial: "spectrums/show/embed", locals: { spectrum: @spectrum } %>
         <a class="btn btn-inverse" data-toggle="modal" href="#setmodal"><i class="icon icon-white icon-plus-sign"></i><span class="hidden-phone"> Add to set</span></a>
         <a class="btn btn-inverse hidden-phone" id="createSet" href="javascript:void(0);"><i class="icon icon-white icon-list"></i><span class="hidden-phone"> Save as set</span></a>
         <a data-toggle="modal" class="btn btn-inverse" href="#comparemodal"><i class="icon icon-white icon-align-left"></i><span class="hidden-phone"> Compare</span></a>
@@ -115,16 +115,29 @@
           <% end %>
         </div>
 
-      <div id="share" class="pull-right" style="margin-top:14px;">
-        <div class="fb-like" data-send="false" data-layout="button_count" data-width="50" data-show-faces="false" style="vertical-align:top;zoom:1;*display:inline"></div>
-        <a href="https://twitter.com/share" class="twitter-share-button">Tweet</a>
-      </div>
-
-      <h3>Notes</h3>
-
-      <p><% if @spectrum.notes %><%=raw RDiscount.new(@spectrum.notes).to_html %><% end %></p>
-
-      <%= render :partial => "spectrums/show/commenting" %>
+        <div id="share" class="pull-right" style="margin-top:14px;">
+          <div class="fb-like" data-send="false" data-layout="button_count" data-width="50" data-show-faces="false" style="vertical-align:top;zoom:1;*display:inline"></div>
+          <a href="https://twitter.com/share" class="twitter-share-button">Tweet</a>
+        </div>
+       
+        <h3>Notes</h3>
+       
+        <% if @spectrum.has_powertag('calibration') %>
+          <p>This spectrum used the calibration from <a href="/spectrums/<%= @spectrum.powertag('calibration') %>"><%= @spectrum.calibration.title %></a>.</p>
+        <% end %>
+       
+        <p><% if @spectrum.notes %><%=raw RDiscount.new(@spectrum.notes).to_html %><% end %></p>
+       
+        <a name="comments"></a>
+        <h3>Comments (<%= @spectrum.comments.length %>)</h3>
+       
+        <div class="row-fluid">
+       
+          <div class="span8">
+            <%= render partial: 'comments/list', locals: { datum: @spectrum, comments: @spectrum.comments } %>
+          </div>
+       
+        </div>
 
       </div>
     </div>

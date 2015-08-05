@@ -11,22 +11,26 @@ SpectralWorkbench.Graph.prototype.graphSetup = function() {
   ;
 
   chart.xAxis     //Chart x-axis settings
-            .axisLabel('Wavelength (nanometers)')
+            .axisLabel('Wavelength ('+this.xUnit+')')
             .tickFormat(d3.format('1d'));
 
   chart.yAxis     //Chart y-axis settings
             .axisLabel('Intensity (%)')
             .tickFormat(d3.format('%'));
 
+  var that = this
+
   /* Line event handlers */
   var onmouseover = function() {
     var id = d3.select(this).data()[0].id;
-    $('.spectrum-'+id).addClass('highlight');
+    $('tr.spectrum-'+id).addClass('highlight');
     d3.select(this).classed('highlight',true);
+    // scroll to the spectrum in the table below:
+    if (that.embed) window.location = (window.location+'').split('#')[0]+'#s'+id;
   }
   var onmouseout = function() {
     var id = d3.select(this).data()[0].id;
-    $('.spectrum-'+id).removeClass('highlight');
+    $('tr.spectrum-'+id).removeClass('highlight');
     d3.select(this).classed('highlight',false);
   }
 
@@ -35,34 +39,43 @@ SpectralWorkbench.Graph.prototype.graphSetup = function() {
     return d.id;
   }
 
-  var that = this;
   var onImport = function(data,chart) {
+
     /* Enter data into the graph */
     that.data = d3.select('#graph svg')  //Select the <svg> element you want to render the chart in.   
         .datum(data,idKey)   //Populate the <svg> element with chart data and provide a binding key
         .call(chart)         //Finally, render the chart!
         .attr('id',idKey)
 
-    d3.selectAll('g.nv-group')
+    d3.selectAll('g.nv-scatterWrap g.nv-groups g') // ONLY the lines, not the scatterplot-based hover circles
         .on("mouseover", onmouseover)
         .on("mouseout", onmouseout)
+
+    d3.selectAll('g.nv-line > g > g.nv-groups g') // ONLY the lines, not the scatterplot-based hover circles
         .attr("id", function() {
-          var sel = d3.select(this)
+          var sel = d3.select(this),
               data  = sel.data()[0];
+
           // color corresponding table entry
-          console.log(sel,'spectrum-'+data.id+' .key','background',sel.style('stroke'))
-          $('.spectrum-'+data.id+' div.key').css('background',sel.style('stroke'));
-          // highlight corresponding line
-          $('.spectrum-'+data.id).mouseover(function() {
-            d3.selectAll('#spectrum-line-'+data.id).classed('highlight',true);
+          $('tr.spectrum-'+data.id+' div.key').css('background',sel.style('stroke'));
+
+          // highlight corresponding line when hovering on table row
+          $('tr.spectrum-'+data.id).mouseover(function() {
+            d3.selectAll('g.nv-line > g > g.nv-groups > g').classed('dimmed', true );
+            d3.selectAll('g#spectrum-line-'+data.id).classed(       'dimmed', false);
+            d3.selectAll('g#spectrum-line-'+data.id).classed(    'highlight', true );
           });
-          $('.spectrum-'+data.id).mouseout(function() {
-            d3.selectAll('#spectrum-line-'+data.id).classed('highlight',false);
+          $('tr.spectrum-'+data.id).mouseout(function() {
+            d3.selectAll('g.nv-line > g > .nv-groups *').classed( 'dimmed', false);
+            d3.selectAll('g#spectrum-line-'+data.id).classed(  'highlight', false);
           });
           // apparently HTML id has to begin with a string? 
           // http://stackoverflow.com/questions/70579/what-are-valid-values-for-the-id-attribute-in-html
           return 'spectrum-line-'+data.id;
         });
+
+    // actually add it to the display
+    nv.addGraph(chart);
 
   }
 
@@ -73,14 +86,12 @@ SpectralWorkbench.Graph.prototype.graphSetup = function() {
                       chart, 
                       onImport);
   } else if (this.dataType == "set") {
-    this.importData( "/sets/" 
+    this.importData( "/sets/calibrated/" 
                     + this.args.set_id 
                     + ".json", 
                       chart, 
                       onImport);
   }
-
-  return chart;
 }
 
 SpectralWorkbench.Graph.prototype.updateSize = function() {
@@ -88,22 +99,31 @@ SpectralWorkbench.Graph.prototype.updateSize = function() {
   var that = this;
 
   return (function() { 
+
     that.width  = getUrlParameter('width')  || $(window).width() || that.width;
+
     if (getUrlParameter('height')) {
+
       that.height = getUrlParameter('height');
+
     } else {
 
       if (($(window).height() < 450 && that.dataType == 'set') || 
-          ($(window).height() < 350 && that.dataType == 'spectrum')) {
+          ($(window).height() < 350 && that.dataType == 'spectrum')) { 
         // compact
         that.height = 180;
         $('#embed').addClass('compact');
+
       } else {
+
         // full size
         that.height = 200;
         $('#embed').removeClass('compact');
+
       }
+
       that.height = that.height - that.margin.top  - that.margin.bottom;
+
     }
 
     that.width  = that.width  
@@ -121,6 +141,10 @@ SpectralWorkbench.Graph.prototype.updateSize = function() {
     if (that.chart) {
       that.chart.update();
     }
+
+    // hide loading grey background
+    $('#graphing #graph').css('background','white');
+    $('#graphing #graph .icon-spinner').hide();
 
   });
 }
