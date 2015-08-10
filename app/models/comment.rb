@@ -1,6 +1,4 @@
 class Comment < ActiveRecord::Base
-  attr_accessible :spectrum_id, :body, :author, :email, :spectra_set_id, :user_id
-
   belongs_to :user
   validates_presence_of :user_id, :body
 

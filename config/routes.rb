@@ -1,4 +1,4 @@
-SpectralWorkbench::Application.routes.draw do
+Rails.application.routes.draw do
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
@@ -73,8 +73,7 @@ SpectralWorkbench::Application.routes.draw do
   get '/capture/recent_calibrations' => 'capture#recent_calibrations'
 
   # Registered user pages:
-  get '/profile', to: 'users#show', :as => 'profile'
-  get '/profile/:id', to: 'users#show', :as => 'profile'
+  get '/profile/(:id)', to: 'users#show', :as => 'profile'
 
   get '/macro/edit/:id' => 'macros#edit'
   get '/macro/update/:id' => 'macros#update'
@@ -89,7 +88,6 @@ SpectralWorkbench::Application.routes.draw do
   get '/upload' => 'spectrums#new'
 
   resources :users
-  resources :macros
   resources :session
   resources :tags
   resources :sets

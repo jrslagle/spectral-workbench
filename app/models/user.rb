@@ -16,11 +16,6 @@ class User < ActiveRecord::Base
   has_many :spectra_sets, :dependent => :destroy
   has_many :comments,     :dependent => :destroy
 
-  # HACK HACK HACK -- how to do attr_accessible from here?
-  # prevents a user from submitting a crafted form that bypasses activation
-  # anything else you want your user to change should be added here.
-  attr_accessible :login, :email, :name, :password, :password_confirmation
-
   def after_create
     UserMailer.google_groups_email(self)
     UserMailer.welcome_email(self)

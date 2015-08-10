@@ -83,4 +83,8 @@ class TagsController < ApplicationController
     @tagnames = count.sort_by {|k,v| v }.reverse
   end
 
+  def permitted_params
+      params.permit tag: [:spectrum_id, :name, :user_id]
+  end
+
 end

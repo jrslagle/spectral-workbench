@@ -1,11 +1,7 @@
-source 'https://rubygems.org'
-source 'https://rails-assets.org'
+source 'http://rubygems.org'
 
-ruby '2.1.2'
-gem 'rails', '~>3.2'
-
-# Bundle edge Rails instead:
-# gem 'rails', :git => 'git://github.com/rails/rails.git'
+ruby '2.2.2'
+gem 'rails', '~>4.2.3'
 
 # Database handling
 group :sqlite do
@@ -20,12 +16,6 @@ end
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  #gem 'sass-rails',   '~> 3.2.3'
-  #gem 'coffee-rails', '~> 3.2.1'
-
-  # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-  # gem 'therubyracer', :platforms => :ruby
-
   gem 'uglifier', '>= 1.0.3'
 end
 
@@ -35,33 +25,22 @@ gem 'jquery-rails'
 gem 'passenger'
 gem 'recaptcha', :require => "recaptcha/rails"
 gem 'cocaine', '~>0.5.3'
-gem 'redcarpet', '2.1.1'
+gem 'redcarpet', '3.3.2'
 
-gem 'rdiscount', '1.6.8'
+gem 'rdiscount', '2.1.8'
 gem 'will_paginate'
-gem 'will_paginate-bootstrap', '0.2.5'
+gem 'will_paginate-bootstrap', '1.0.1'
 gem 'paperclip', '>= 4.1.1'
+gem 'bootstrap-sass', '3.3.5.1'
 
 gem 'ruby-openid'
 gem 'open_id_authentication'
 
 gem 'rack-offline', '>=0.6.4'
 
+gem 'rails-perftest', '0.0.6'
+gem 'ruby-prof', '0.15.8'
+
 group :development, :test do
-  #gem 'rspec-rails'
-  #gem 'factory_girl_rails'
 end
 
-# To use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.0.0'
-
-# To use Jbuilder templates for JSON
-# gem 'jbuilder'
-
-# Use unicorn as the app server
-# gem 'unicorn'
-
-# Deploy with Capistrano
-# gem 'capistrano'
-
-#gem "mocha", :group => :test

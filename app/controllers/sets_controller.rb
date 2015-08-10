@@ -189,4 +189,8 @@ class SetsController < ApplicationController
     end
   end
 
+  def permitted_params
+      params.permit spectra_set: [:title, :notes, :spectra_string, :author]
+  end
+
 end

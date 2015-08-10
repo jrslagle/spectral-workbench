@@ -82,4 +82,8 @@ class CommentsController < ApplicationController
     
   end
 
+  def permitted_params
+    params.permit comment: [:spectrum_id, :body, :author, :email, :spectra_set_id]
+  end
+
 end

@@ -4,8 +4,6 @@ require 'rmagick'
 class Spectrum < ActiveRecord::Base
   include ActionView::Helpers::DateHelper
 
-  attr_accessible :title, :author, :user_id, :notes, :photo, :video_row
-
   has_many :comments, :dependent => :destroy
   has_many :likes, :dependent => :destroy
   has_many :tags, :dependent => :destroy
